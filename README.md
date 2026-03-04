@@ -2,6 +2,10 @@
 
 A local lightweight agent for PC automation with remote control via Telegram.
 
+## Current Status
+
+This project is a work-in-progress with about 30% completion. There are bugs and some performance issues that I am currently dealing with and am trying to solve to get this project to a working-prototype
+
 ## Features
 
 - **🤖 Multi-LLM Support**: Uses local Ollama for fast operations, with OpenRouter fallback for complex tasks

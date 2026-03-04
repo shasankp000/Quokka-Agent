@@ -1,0 +1,130 @@
+# Quokka Agent Configuration
+# Environment variables can override these with QUOKKA_<SECTION>__<KEY>
+# Example: QUOKKA_TELEGRAM__TOKEN=your_token
+
+environment: production
+
+# Telegram Bot Configuration
+telegram:
+  # Get token from @BotFather on Telegram
+  token: ""
+  # List of allowed Telegram user IDs (empty = allow all)
+  allowed_users: []
+  # Admin users (bypass some security checks)
+  admin_users: []
+  polling_timeout: 30
+  polling_interval: 0.5
+
+# Local LLM Configuration (Ollama)
+ollama:
+  base_url: "http://localhost:11434"
+  model: "llama3.1:8b"
+  timeout: 120
+  context_window: 8192
+  temperature: 0.7
+
+# Cloud LLM Configuration (OpenRouter)
+openrouter:
+  # Get API key from https://openrouter.ai
+  api_key: ""
+  base_url: "https://openrouter.ai/api/v1"
+  model: "anthropic/claude-3.5-sonnet"
+  timeout: 180
+  temperature: 0.7
+
+# LLM Router Configuration
+router:
+  # Complexity threshold (0-1) for routing to cloud
+  complexity_threshold: 0.5
+  # Tools that always use local LLM for speed
+  always_local_tools:
+    - shell_exec
+    - file_ops
+    - obsidian_read
+    - obsidian_write
+  # Patterns that always use cloud LLM
+  always_cloud_patterns:
+    - complex reasoning
+    - code review
+    - detailed analysis
+
+# Security Configuration
+security:
+  enabled: true
+  # If true, actions are previewed before execution
+  dry_run_default: false
+  # Whitelisted commands for shell_exec
+  allowed_commands:
+    - ls
+    - cat
+    - head
+    - tail
+    - grep
+    - find
+    - pwd
+    - echo
+    - git
+    - python
+    - pip
+    - npm
+    - node
+    - bun
+    - code
+    - nvim
+    - mkdir
+    - touch
+    - cp
+    - mv
+    - rm
+    - chmod
+  # Blocked commands (never allowed)
+  blocked_commands:
+    - sudo
+    - su
+    - passwd
+    - chmod 777
+    - dd
+    - mkfs
+  # Allowed directories for file operations
+  allowed_directories:
+    - "~"
+  # Blocked directories (never accessible)
+  blocked_directories:
+    - /etc/passwd
+    - /etc/shadow
+    - ~/.ssh
+    - ~/.gnupg
+  max_command_timeout: 300
+  audit_log: true
+
+# Executor Configuration
+executor:
+  max_concurrent_tasks: 3
+  default_timeout: 60
+  containerized: false
+  output_poll_interval: 0.5
+
+# Memory Configuration
+# Use absolute paths for systemd service
+memory:
+  session_dir: "/var/lib/quokka/sessions"
+  task_queue_file: "/var/lib/quokka/tasks/queue.json"
+  max_session_messages: 100
+  session_ttl_hours: 24
+
+# Multimodal Configuration
+multimodal:
+  ocr_enabled: true
+  ocr_language: "eng"
+  pdf_enabled: true
+  max_image_size_mb: 10
+  max_pdf_size_mb: 50
+
+# Logging Configuration
+# Use absolute paths for systemd service
+logging:
+  level: "INFO"
+  file: "/var/log/quokka/agent.log"
+  max_size_mb: 10
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
